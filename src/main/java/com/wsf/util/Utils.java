@@ -1,6 +1,8 @@
 package com.wsf.util;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,8 +33,8 @@ public class Utils {
                 System.out.println(f.getAbsolutePath()+":");
                 while(matcher.find()){
                     System.out.println(matcher.group());
-
                 }
+                System.out.println();
 
 
             }catch (IOException e) {
@@ -43,7 +45,13 @@ public class Utils {
 
 
     }
+
     public static String[] getJsFiles(String folderPath){
+        List<String> paths=new ArrayList<>();
+        doGetJsFiles(folderPath,paths);
+        return paths.toArray(new String[paths.size()]);
+    }
+    private static String[] doGetJsFiles(String folderPath,List<String> paths){
         if(folderPath==null) return null;
 
         File folder=new File(folderPath);
@@ -55,13 +63,23 @@ public class Utils {
             @Override
             public boolean accept(File pathname) {
 
-                return pathname.getName().endsWith(".js");
+                if(pathname.getName().endsWith(".js")) return true;
+
+                if(pathname.isDirectory()) return true;
+
+                return false;
 
             }
         });
 
         for(File f:files){
-            System.out.println(f.getName());
+
+
+            if(f.isFile()) {
+                paths.add(f.getAbsolutePath());
+            }else{
+                doGetJsFiles(f.getAbsolutePath(),paths);
+            }
         }
 
 
@@ -73,10 +91,10 @@ public class Utils {
     public static void main(String[] args) {
 
 
-        getJsFiles("C:\\Users\\SrV\\Downloads");
 
 
-        //getQueryId(new String[]{"C:\\Users\\SrV\\Downloads\\FeedPageContainer.js"});
+
+        getQueryId(getJsFiles(""));
     }
 
 }
