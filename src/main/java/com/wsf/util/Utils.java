@@ -1,8 +1,7 @@
 package com.wsf.util;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,6 +13,8 @@ public class Utils {
         File[] filePaths=new File[paths.length];
         Pattern pattern=Pattern.compile("queryId:\"[0-9a-zA-Z]{32}\"");
         Matcher matcher=null;
+        StringBuilder show=new StringBuilder();
+
         for(int i=0;i<filePaths.length;i++){
             filePaths[i]=new File(paths[i]);
         }
@@ -30,11 +31,11 @@ public class Utils {
                 }
 
                 matcher=pattern.matcher(sb.toString());
-                System.out.println(f.getAbsolutePath()+":");
+                show.append(f.getAbsolutePath()+":\n");
                 while(matcher.find()){
-                    System.out.println(matcher.group());
+                    show.append(matcher.group()+"\n");
                 }
-                System.out.println();
+                show.append("\n");
 
 
             }catch (IOException e) {
@@ -43,15 +44,18 @@ public class Utils {
         }
 
 
+        System.out.println(show.toString());
+
+
 
     }
 
     public static String[] getJsFiles(String folderPath){
-        List<String> paths=new ArrayList<>();
+        Set<String> paths=new LinkedHashSet<>();
         doGetJsFiles(folderPath,paths);
         return paths.toArray(new String[paths.size()]);
     }
-    private static void doGetJsFiles(String folderPath,List<String> paths){
+    private static void doGetJsFiles(String folderPath,Set<String> paths){
         if(folderPath==null) return;
 
         File folder=new File(folderPath);
@@ -76,7 +80,9 @@ public class Utils {
 
 
             if(f.isFile()) {
+
                 paths.add(f.getAbsolutePath());
+
             }else{
                 doGetJsFiles(f.getAbsolutePath(),paths);
             }
@@ -89,7 +95,7 @@ public class Utils {
 
 
 
-        getQueryId(getJsFiles(""));
+        getQueryId(getJsFiles("C:\\Users\\SrV\\Downloads"));
     }
 
 }
