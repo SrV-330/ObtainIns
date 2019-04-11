@@ -51,12 +51,12 @@ public class Utils {
         doGetJsFiles(folderPath,paths);
         return paths.toArray(new String[paths.size()]);
     }
-    private static String[] doGetJsFiles(String folderPath,List<String> paths){
-        if(folderPath==null) return null;
+    private static void doGetJsFiles(String folderPath,List<String> paths){
+        if(folderPath==null) return;
 
         File folder=new File(folderPath);
 
-        if (!folder.exists()) return  null;
+        if (!folder.exists()) return;
 
 
         File[] files=folder.listFiles(new FileFilter() {
@@ -82,11 +82,6 @@ public class Utils {
             }
         }
 
-
-
-
-
-        return  null;
     }
     public static void main(String[] args) {
 
